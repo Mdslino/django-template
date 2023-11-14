@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "django-template"
+version = "0.1.0"
+description = "A template repository for Django projects"
+authors = ["Marcelo Lino <mdslino@gmail.com>"]
+readme = "README.md"
+packages = [{include = "django_template"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
