@@ -4,7 +4,7 @@ export PYTHONPATH=$(PYTHON_PATH)
 export PYTHONUNBUFFERED=1
 export DJANGO_SETTINGS_MODULE=core.settings
 
-.PHONY: all clean install test black isort format-code sort-imports flake8 mypy black-check isort-check lint run run-dev migrate migration help run-docker
+.PHONY: all clean install test format lint run run-dev migrate migration help run-docker
 
 # Misc Section
 help:
@@ -44,7 +44,7 @@ run-dev:
 
 run-docker:
 	@echo "Running docker-compose"
-	@docker compose up -d app
+	@docker compose up --build -d app
 	@echo "App is running on http://localhost:8000"
 
 # Lint Section
