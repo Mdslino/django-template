@@ -48,30 +48,11 @@ run-docker:
 	@echo "App is running on http://localhost:8000"
 
 # Lint Section
-black:
-	@black .
+format:
+	@ruff format .
 
-isort:
-	@isort .
-
-format-code: black isort
-
-sort-imports:
-	@isort .
-
-flake8:
-	@flake8 .
-
-mypy:
-	@mypy .
-
-black-check:
-	@black --check .
-
-isort-check:
-	@isort --check-only .
-
-lint: flake8 black-check isort-check
+lint:
+	@ruff check .
 
 # Migration Section
 

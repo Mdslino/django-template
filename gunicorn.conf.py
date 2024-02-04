@@ -1,55 +1,58 @@
-bind = "0.0.0.0:8000"
-workers = 4
-worker_class = "gevent"
-accesslog = "-"
-errorlog = "-"
-loglevel = "info"
-preload_app = True
-
 import logging.config
 import os
 
 import structlog
 
-timestamper = structlog.processors.TimeStamper(fmt="iso")
+bind = '0.0.0.0:8000'
+workers = 4
+worker_class = 'gevent'
+accesslog = '-'
+errorlog = '-'
+loglevel = 'info'
+preload_app = True
+
+
+timestamper = structlog.processors.TimeStamper(fmt='iso')
 pre_chain = [
     # Add the log level and a timestamp to the event_dict if the log entry is not from structlog.
     structlog.stdlib.add_log_level,
     timestamper,
 ]
 
-logging.config.dictConfig({
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "console": {
-            "()": structlog.stdlib.ProcessorFormatter,
-            "processor": structlog.dev.ConsoleRenderer(colors=False),
-            "foreign_pre_chain": pre_chain,
+logging.config.dictConfig(
+    {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'console': {
+                '()': structlog.stdlib.ProcessorFormatter,
+                'processor': structlog.dev.ConsoleRenderer(colors=False),
+                'foreign_pre_chain': pre_chain,
+            },
+            'json': {
+                '()': structlog.stdlib.ProcessorFormatter,
+                'processor': structlog.processors.JSONRenderer(),
+                'foreign_pre_chain': pre_chain,
+            },
         },
-        "json": {
-            "()": structlog.stdlib.ProcessorFormatter,
-            "processor": structlog.processors.JSONRenderer(),
-            "foreign_pre_chain": pre_chain,
+        'handlers': {
+            'console': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'console',
+            },
         },
-    },
-    "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "console",
+        'loggers': {
+            '': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': True}
         },
-    },
-    "loggers": {
-        "": {"handlers": ["console"], "level": "DEBUG", "propagate": True}
-    },
-})
+    }
+)
 
 structlog.configure(
     processors=[
         structlog.contextvars.merge_contextvars,
         structlog.stdlib.filter_by_level,
-        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.TimeStamper(fmt='iso'),
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),
@@ -66,9 +69,9 @@ structlog.configure(
 
 class GunicornLogger(object):
     def __init__(self, cfg):
-        self._error_logger = structlog.get_logger("gunicorn.error")
+        self._error_logger = structlog.get_logger('gunicorn.error')
         self._error_logger.setLevel(logging.INFO)
-        self._access_logger = structlog.get_logger("gunicorn.access")
+        self._access_logger = structlog.get_logger('gunicorn.access')
         self._access_logger.setLevel(logging.INFO)
         self.cfg = cfg
 
@@ -99,14 +102,14 @@ class GunicornLogger(object):
             status = status.split(None, 1)[0]
 
         self._access_logger.info(
-            "request",
-            method=environ["REQUEST_METHOD"],
-            request_uri=environ["RAW_URI"],
+            'request',
+            method=environ['REQUEST_METHOD'],
+            request_uri=environ['RAW_URI'],
             status=status,
-            response_length=getattr(resp, "sent", None),
-            request_time_seconds="%d.%06d"
+            response_length=getattr(resp, 'sent', None),
+            request_time_seconds='%d.%06d'
             % (request_time.seconds, request_time.microseconds),
-            pid="<%s>" % os.getpid(),
+            pid='<%s>' % os.getpid(),
         )
 
     def reopen_files(self) -> None:
