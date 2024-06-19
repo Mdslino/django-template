@@ -57,3 +57,7 @@ migrate:
 
 migration:
 	@python manage.py makemigrations
+
+# Utils Section
+createsuperuser:
+	@python manage.py createsuperuser --noinput --username admin

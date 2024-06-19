@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'health_check',
     'health_check.db',
     'django_structlog',
+    'auth'
 ]
 
 MIDDLEWARE = [
