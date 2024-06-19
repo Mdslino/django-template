@@ -2,7 +2,6 @@ SHELL := /bin/bash
 PYTHON_PATH := $(shell pwd)
 export PYTHONPATH=$(PYTHON_PATH)
 export PYTHONUNBUFFERED=1
-export DJANGO_SETTINGS_MODULE=core.settings
 
 .PHONY: all clean install test format lint run run-dev migrate migration help run-docker
 
@@ -16,10 +15,10 @@ install:
 	poetry install
 
 clean:
-	@find . -name '*.pyc' -exec rm -rf {} \;
-	@find . -name '__pycache__' -exec rm -rf {} \;
-	@find . -name 'Thumbs.db' -exec rm -rf {} \;
-	@find . -name '*~' -exec rm -rf {} \;
+	@find . -name '*.pyc' -exec rm -rf {} +
+	@find . -name '__pycache__' -exec rm -rf {} +
+	@find . -name 'Thumbs.db' -exec rm -rf {} +
+	@find . -name '*~' -exec rm -rf {} +
 	rm -rf .cache
 	rm -rf build
 	rm -rf dist
@@ -30,10 +29,10 @@ clean:
 
 # Test Section
 test:
-	pytest tests/ -vv
+	pytest -n auto tests/ -vv
 
 test-coverage:
-	pytest --cov-branch --cov-report term-missing --cov=app tests/ -vv
+	pytest -n auto --cov-branch --cov-report term-missing --cov=core tests/ -vv
 
 #Run Section
 run:
@@ -48,11 +47,8 @@ run-docker:
 	@echo "App is running on http://localhost:8000"
 
 # Lint Section
-format:
-	@ruff format .
-
 lint:
-	@ruff check .
+	@./scripts/lint.sh $(MODE)
 
 # Migration Section
 
