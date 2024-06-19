@@ -19,9 +19,13 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
+from custom_auth.views import admin_login
+
 urlpatterns = [
+    path('admin/login/', admin_login, name='login'),
     path('admin/', admin.site.urls),
     path('ht/', include('health_check.urls')),
+    path('auth/', include('custom_auth.urls')),
 ]
 
 if settings.DEBUG:

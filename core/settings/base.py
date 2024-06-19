@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'health_check',
     'health_check.db',
     'django_structlog',
-    'auth'
+    'custom_auth',
 ]
 
 MIDDLEWARE = [
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,21 +89,21 @@ DATABASES = {'default': dburl(config('DATABASE_URL'))}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.custom_auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': (
-            'django.contrib.auth.password_validation.MinimumLengthValidator'
+            'django.contrib.custom_auth.password_validation.MinimumLengthValidator'
         ),
     },
     {
         'NAME': (
-            'django.contrib.auth.password_validation.CommonPasswordValidator'
+            'django.contrib.custom_auth.password_validation.CommonPasswordValidator'
         ),
     },
     {
         'NAME': (
-            'django.contrib.auth.password_validation.NumericPasswordValidator'
+            'django.contrib.custom_auth.password_validation.NumericPasswordValidator'
         ),
     },
 ]
@@ -187,3 +187,7 @@ structlog.configure(
 
 DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL = logging.INFO
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
+
+AUTHENTICATION_BACKENDS = ['custom_auth.backend.EmailBackend']
+
+LOGIN_URL = '/auth/login'
