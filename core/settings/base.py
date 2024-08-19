@@ -50,7 +50,6 @@ EXTERNAL_APPS = [
     'health_check',
     'health_check.db',
     'widget_tweaks',
-    'social_django',
 ]
 
 CUSTOM_APPS = []
@@ -142,7 +141,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Logging
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'json_formatter': {
             '()': structlog.stdlib.ProcessorFormatter,
@@ -166,14 +165,15 @@ LOGGING = {
         }
     },
     'loggers': {
-        'django_structlog': {
+        'apps': {
             'handlers': ['console'],
             'level': 'INFO',
-        },
-        'django_structlog_demo_project': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
+            'propagate': True,
+        }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
     },
 }
 
@@ -186,6 +186,7 @@ structlog.configure(
         structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),
         structlog.processors.StackInfoRenderer(),
+        structlog.processors.dict_tracebacks,
         structlog.processors.format_exc_info,
         structlog.processors.UnicodeDecoder(),
         structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
@@ -198,16 +199,7 @@ DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL = logging.INFO
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
 
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.email.EmailAuth',
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-# Common Django Settings
-LOGIN_URL = 'account/login'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-
-SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
