@@ -31,9 +31,6 @@ services:
     <<: *x-app
     command: python manage.py migrate
 
-
-
-
   db:
     image: postgres:alpine
     ports:
@@ -47,7 +44,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
-      interval: 30s
+      interval: 5s
       timeout: 10s
       retries: 5
       start_period: 1s
