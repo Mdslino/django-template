@@ -35,18 +35,27 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_INTERNAL_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
+]
+
+EXTERNAL_APPS = [
+    'django_extensions',
+    'django_structlog',
     'health_check',
     'health_check.db',
-    'django_structlog',
-    'custom_auth',
+    'widget_tweaks',
+    'social_django',
 ]
+
+CUSTOM_APPS = []
+
+INSTALLED_APPS = DJANGO_INTERNAL_APPS + EXTERNAL_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,21 +98,21 @@ DATABASES = {'default': dburl(config('DATABASE_URL'))}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.custom_auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': (
-            'django.contrib.custom_auth.password_validation.MinimumLengthValidator'
+            'django.contrib.auth.password_validation.MinimumLengthValidator'
         ),
     },
     {
         'NAME': (
-            'django.contrib.custom_auth.password_validation.CommonPasswordValidator'
+            'django.contrib.auth.password_validation.CommonPasswordValidator'
         ),
     },
     {
         'NAME': (
-            'django.contrib.custom_auth.password_validation.NumericPasswordValidator'
+            'django.contrib.auth.password_validation.NumericPasswordValidator'
         ),
     },
 ]
@@ -111,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -188,6 +197,17 @@ structlog.configure(
 DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL = logging.INFO
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
 
-AUTHENTICATION_BACKENDS = ['custom_auth.backend.EmailBackend']
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.email.EmailAuth',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
-LOGIN_URL = '/auth/login'
+# Common Django Settings
+LOGIN_URL = 'account/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
