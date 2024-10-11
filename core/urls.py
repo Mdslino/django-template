@@ -18,11 +18,9 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from core.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='home'),
     path('ht/', include('health_check.urls')),
 ]
 
