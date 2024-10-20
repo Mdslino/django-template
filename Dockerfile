@@ -9,7 +9,10 @@ ENV PYTHONUNBUFFERED=1 \
     ENVIRONMENT=$ENVIRONMENT \
     POETRY_VIRTUALENVS_CREATE=false \
     POETRY_CACHE_DIR='/var/cache/pypoetry' \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    PATH="/app/.venv/bin:$PATH"
 
 WORKDIR /app
 
@@ -18,14 +21,16 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip setuptools wheel "poetry==${POETRY_VERSION}"
+RUN pip install --upgrade pip setuptools wheel
 
-COPY poetry.lock pyproject.toml ./
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+COPY uv.lock pyproject.toml .python-version ./
 
 RUN if [ "$ENVIRONMENT" = "production" ]; then \
-    poetry install --no-interaction --no-ansi --no-root; \
+    uv sync --frozen --no-dev --no-install-project; \
     else \
-    poetry install --no-interaction --no-ansi --no-root --all-extras; \
+    uv sync --frozen --all-extras; \
     fi
 
 COPY . .

@@ -45,16 +45,25 @@ DJANGO_INTERNAL_APPS = [
 ]
 
 EXTERNAL_APPS = [
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     'django_extensions',
     'django_structlog',
     'health_check',
-    'health_check.db',
+    'rest_framework',
+    'rest_framework.authtoken',
     'widget_tweaks',
 ]
 
 CUSTOM_APPS = []
 
 INSTALLED_APPS = DJANGO_INTERNAL_APPS + EXTERNAL_APPS + CUSTOM_APPS
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_structlog.middlewares.RequestMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -139,7 +149,6 @@ STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Logging
 LOGGING = {
     'version': 1,
@@ -205,3 +214,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+GOOGLE_CALLBACK_URL = config(
+    'GOOGLE_CALLBACK_URL', default='http://localhost:8000'
+)

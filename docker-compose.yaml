@@ -26,6 +26,8 @@ services:
         <<: *x-app-depends_on
         migrate:
           condition: service_completed_successfully
+        db:
+          condition: service_healthy
 
   migrate:
     <<: *x-app
