@@ -24,14 +24,8 @@ services:
       start_period: 1s
     depends_on:
         <<: *x-app-depends_on
-        migrate:
-          condition: service_completed_successfully
         db:
           condition: service_healthy
-
-  migrate:
-    <<: *x-app
-    command: python manage.py migrate
 
   db:
     image: postgres:alpine

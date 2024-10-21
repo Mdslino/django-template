@@ -55,6 +55,12 @@ lint:
 migrate:
 	@python manage.py migrate
 
+docker-migrate:
+	@docker compose run --remove-orphans app uv run manage.py migrate
+
+docker-migration:
+	@docker compose run app --remove-orphans uv run manage.py makemigrations
+
 migration:
 	@python manage.py makemigrations
 
