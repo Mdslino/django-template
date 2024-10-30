@@ -45,17 +45,13 @@ DJANGO_INTERNAL_APPS = [
 ]
 
 EXTERNAL_APPS = [
+    'allauth_ui',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
     'django_extensions',
     'django_structlog',
     'health_check',
-    'rest_framework',
-    'rest_framework.authtoken',
+    'slippers',
     'widget_tweaks',
 ]
 
@@ -73,8 +69,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_structlog.middlewares.RequestMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'django_structlog.middlewares.RequestMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -105,24 +101,20 @@ DATABASES = {'default': dburl(config('DATABASE_URL'))}
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
+PASSWORD_VALIDATION_MODULE = 'django.contrib.auth.password_validation'
+
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.authentication.password_validation.UserAttributeSimilarityValidator',
+        'NAME': f'{PASSWORD_VALIDATION_MODULE}.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': (
-            'django.contrib.authentication.password_validation.MinimumLengthValidator'
-        ),
+        'NAME': f'{PASSWORD_VALIDATION_MODULE}.MinimumLengthValidator',
     },
     {
-        'NAME': (
-            'django.contrib.authentication.password_validation.CommonPasswordValidator'
-        ),
+        'NAME': f'{PASSWORD_VALIDATION_MODULE}.CommonPasswordValidator',
     },
     {
-        'NAME': (
-            'django.contrib.authentication.password_validation.NumericPasswordValidator'
-        ),
+        'NAME': f'{PASSWORD_VALIDATION_MODULE}.NumericPasswordValidator',
     },
 ]
 
@@ -209,11 +201,14 @@ structlog.configure(
 DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL = logging.INFO
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-GOOGLE_CALLBACK_URL = config(
-    'GOOGLE_CALLBACK_URL', default='http://localhost:8000'
-)
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ALLAUTH_UI_THEME = "dark"

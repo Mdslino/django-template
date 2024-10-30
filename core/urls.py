@@ -19,14 +19,13 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
-from core.views import GoogleLogin
+from core import views
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     path('ht/', include('health_check.urls')),
-    path('rest-auth/', include('dj_rest_auth.urls')),
-    path('rest-auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
 ]
 
 if settings.DEBUG:

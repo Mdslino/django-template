@@ -66,4 +66,4 @@ migration:
 
 # Utils Section
 createsuperuser:
-	@python manage.py createsuperuser --noinput --username admin
+	@python manage.py createsuperuser --noinput --username admin --email mdslino@gmail.com
