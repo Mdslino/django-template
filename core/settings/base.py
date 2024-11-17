@@ -45,13 +45,9 @@ DJANGO_INTERNAL_APPS = [
 ]
 
 EXTERNAL_APPS = [
-    'allauth_ui',
-    'allauth',
-    'allauth.account',
     'django_extensions',
     'django_structlog',
     'health_check',
-    'slippers',
     'widget_tweaks',
 ]
 
@@ -69,7 +65,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
     'django_structlog.middlewares.RequestMiddleware',
 ]
 
@@ -205,12 +200,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ALLAUTH_UI_THEME = "dark"
 
 LOGIN_REDIRECT_URL = '/'
