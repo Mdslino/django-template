@@ -63,7 +63,3 @@ docker-migration:
 
 migration:
 	@python manage.py makemigrations
-
-# Utils Section
-createsuperuser:
-	@python manage.py createsuperuser --noinput --username admin --email mdslino@gmail.com
