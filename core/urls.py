@@ -20,9 +20,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
-    path('ht/', include('health_check.urls')),
+    path('health/', include('health_check.urls')),
 ]
 
 if settings.DEBUG:
