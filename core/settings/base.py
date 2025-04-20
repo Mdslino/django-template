@@ -48,6 +48,7 @@ EXTERNAL_APPS = [
     'django_extensions',
     'django_structlog',
     'health_check',
+    'health_check.db',
     'widget_tweaks',
     'rest_framework',
 ]
