@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account socialaccount %}
+{% load static %}
+
+{% block title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 text-center mb-4">{% trans "Sign In" %}</h1>
+
+                <form class="login" method="POST" action="{% url 'account_login' %}">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <p class="mb-0">{{ error }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label for="id_login" class="form-label">{% trans "E-mail" %}</label>
+                        <input type="email" name="login" id="id_login" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">{% trans "Password" %}</label>
+                        <input type="password" name="password" id="id_password" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="remember" id="id_remember" class="form-check-input">
+                        <label class="form-check-label" for="id_remember">{% trans "Lembrar-me" %}</label>
+                    </div>
+
+                    {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <a class="text-decoration-none" href="{% url 'account_reset_password' %}">
+                            {% trans "Esqueceu a senha?" %}
+                        </a>
+                        <button class="btn btn-primary" type="submit">
+                            {% trans "Entrar" %}
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center my-4">
+                    <span class="text-muted">{% trans 'ou' %}</span>
+                </div>
+
+                {% get_providers as socialaccount_providers %}
+                {% if socialaccount_providers %}
+                <div class="socialaccount_ballot">
+                    <div class="socialaccount_providers">
+                        {% include "account/snippets/google_button.html" %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="text-center mt-4">
+                    <p class="text-muted mb-0">
+                        {% trans "Não tem uma conta?" %}
+                        <a href="{{ signup_url }}" class="text-decoration-none">{% trans "Cadastrar" %}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth-validation.js' %}"></script>
+{% endblock %} 
