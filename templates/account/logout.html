@@ -1,36 +1,19 @@
 {% extends "base.html" %}
+
 {% load i18n %}
 
-{% block title %}{% trans "Sign Out" %}{% endblock %}
-
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <h1 class="h3 text-center mb-4">{% trans "Sign Out" %}</h1>
-
-                <p class="text-center text-muted mb-4">
-                    {% trans 'Tem certeza que deseja sair?' %}
-                </p>
-
-                <form method="post" action="{% url 'account_logout' %}">
-                    {% csrf_token %}
-                    {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                    {% endif %}
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-danger">
-                            {% trans 'Confirmar saída' %}
-                        </button>
-                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
-                            {% trans 'Cancelar' %}
-                        </a>
-                    </div>
-                </form>
-            </div>
+<div class="container" style="max-width: 400px; margin: 40px auto;">
+    <div class="card shadow-sm">
+        <div class="card-body text-center">
+            <h2 class="mb-3">{% trans "Deseja sair?" %}</h2>
+            <p class="mb-4">{% trans "Tem certeza de que deseja sair da sua conta?" %}</p>
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100 mb-2">{% trans "Sim, sair" %}</button>
+            </form>
+            <a href="/" class="btn btn-outline-secondary w-100">{% trans "Cancelar" %}</a>
         </div>
     </div>
 </div>
 {% endblock %} 
- 

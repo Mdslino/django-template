@@ -21,6 +21,8 @@ dependencies = [
     "requests>=2.32.3",
     "djangorestframework>=3.15.2",
     "django-allauth[socialaccount]>=65.7.0",
+    "uvicorn>=0.34.2",
+    "uvloop>=0.21.0",
 ]
 
 [tool.uv]
@@ -86,10 +88,7 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.pytest]
-env_files = [
-    ".tests.env"
-]
-DJANGO_SETTINGS_MODULE = "core.settings.tests"
+# Removido: env_files e DJANGO_SETTINGS_MODULE pois não são válidos aqui
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "core.settings.tests"

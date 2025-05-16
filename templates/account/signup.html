@@ -1,76 +1,46 @@
 {% extends "base.html" %}
+
+{% load static %}
 {% load i18n %}
 {% load account socialaccount %}
-{% load static %}
-
-{% block title %}{% trans "Sign Up" %}{% endblock %}
+{% load widget_tweaks %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <h1 class="h3 text-center mb-4">{% trans "Cadastro" %}</h1>
-
-                <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-                    {% csrf_token %}
-                    {% if form.errors %}
-                        <div class="alert alert-danger">
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    <p class="mb-0">{{ error }}</p>
-                                {% endfor %}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    <div class="mb-3">
-                        <label for="id_email" class="form-label">{% trans "E-mail" %}</label>
-                        <input type="email" name="email" id="id_email" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="id_password1" class="form-label">{% trans "Senha" %}</label>
-                        <input type="password" name="password1" id="id_password1" class="form-control" required>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="id_password2" class="form-label">{% trans "Confirmar senha" %}</label>
-                        <input type="password" name="password2" id="id_password2" class="form-control" required>
-                    </div>
-
-                    {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                    {% endif %}
-
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="submit">
-                            {% trans "Cadastrar" %}
-                        </button>
-                    </div>
-                </form>
-
-                <div class="text-center my-4">
-                    <span class="text-muted">{% trans 'ou' %}</span>
-                </div>
-
-                {% get_providers as socialaccount_providers %}
-                {% if socialaccount_providers %}
-                <div class="socialaccount_ballot">
-                    <div class="socialaccount_providers">
-                        {% include "account/snippets/google_button.html" %}
-                    </div>
-                </div>
+<div class="container" style="max-width: 400px; margin: 40px auto;">
+    <h2 class="mb-4 text-center">{% trans "Criar conta" %}</h2>
+    <form method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form.visible_fields %}
+            <div class="mb-3">
+                <label for="id_{{ field.name }}" class="form-label">{{ field.label }}</label>
+                {{ field|add_class:"form-control" }}
+                {% if field.name == 'password1' %}
+                    <ul id="password-rules" class="form-text list-unstyled ms-1 mb-2">
+                        <li id="rule-length" class="text-danger">Mínimo de 8 caracteres</li>
+                        <li id="rule-numeric" class="text-danger">Não pode ser totalmente numérica</li>
+                        <li id="rule-common" class="text-danger">Não pode ser uma senha comum</li>
+                        <li id="rule-similar" class="text-danger">Não pode ser similar ao email</li>
+                    </ul>
                 {% endif %}
-
-                <div class="text-center mt-4">
-                    <p class="text-muted mb-0">
-                        {% trans "Já tem uma conta?" %}
-                        <a href="{{ login_url }}" class="text-decoration-none">{% trans "Entrar" %}</a>
-                    </p>
-                </div>
+                {{ field.errors }}
             </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success w-100">{% trans "Cadastrar" %}</button>
+    </form>
+    <div class="mt-3 text-center">
+        <span>{% trans "Já tem uma conta?" %}</span>
+        <a href="{% url 'account_login' %}">{% trans "Entrar" %}</a>
+    </div>
+    <div class="mt-4">
+        <hr>
+        <div class="text-center mb-3">
+            <span class="text-muted">{% trans "Ou cadastre-se com:" %}</span>
         </div>
+        <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center" onclick="console.log('Cadastro com Google clicado')">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" width="24" height="24" class="me-2">
+            <span>Cadastrar com Google</span>
+        </a>
     </div>
 </div>
 {% endblock %}

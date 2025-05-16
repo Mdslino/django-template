@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block content %}
+<div class="container" style="max-width: 400px; margin: 40px auto;">
+    <h2 class="mb-4 text-center">{% trans "Confirmação de login social" %}</h2>
+    <div class="alert alert-info text-center" role="alert">
+        {% blocktrans with provider=provider.name %}
+        Você está prestes a conectar sua conta {{ provider }}. Deseja continuar?
+        {% endblocktrans %}
+    </div>
+    <form method="post" action="">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary w-100 mb-2">{% trans "Sim, continuar" %}</button>
+    </form>
+    <a href="{% url 'account_login' %}" class="btn btn-outline-secondary w-100">{% trans "Cancelar e voltar ao login" %}</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %} 

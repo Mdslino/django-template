@@ -36,10 +36,10 @@ test-coverage:
 
 #Run Section
 run:
-	@gunicorn -c gunicorn.conf.py core.wsgi:application
+	@uvicorn core.asgi:application --host 0.0.0.0 --port 8000 --workers 4 --loop uvloop --access-log --use-colors --no-server-header --no-date-header
 
 run-dev:
-	@python manage.py runserver 0.0.0.0:8000
+	@uv run manage.py runserver 0.0.0.0:8000
 
 run-docker:
 	@echo "Running docker-compose"

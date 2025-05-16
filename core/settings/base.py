@@ -16,6 +16,9 @@ from pathlib import Path
 import structlog
 from decouple import config
 from dj_database_url import parse as dburl
+from dotenv import load_dotenv
+
+load_dotenv('.env')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config(
-    'ENVIRONMENT', default=True, cast=lambda value: value == 'development'
-)
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -55,7 +56,6 @@ EXTERNAL_APPS = [
     'health_check.db',
     'rest_framework',
     'widget_tweaks',
-
 ]
 
 CUSTOM_APPS = []
@@ -201,7 +201,7 @@ structlog.configure(
     cache_logger_on_first_use=True,
 )
 
-DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL = logging.INFO
+DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL = logging.ERROR
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -237,12 +237,21 @@ SOCIALACCOUNT_PROVIDERS = {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': ''
-        }
+        'APPS': [
+            {
+                'client_id': config('GOOGLE_OAUTH_CLIENT_ID'),
+                'secret': config('GOOGLE_OAUTH_CLIENT_SECRET'),
+                'key': '',
+                'settings': {
+                    'scope': ['profile', 'email'],
+                    'auth_params': {
+                        'access_type': 'online',
+                    },
+                },
+            }
+        ]
     }
 }
-
-ALLAUTH_UI_THEME = "light"
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_STORE_TOKENS = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
