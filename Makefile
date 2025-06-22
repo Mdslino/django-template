@@ -29,14 +29,14 @@ clean:
 
 # Test Section
 test:
-	pytest -n auto tests/ -vv
+	uv run pytest -n auto tests/ -vv
 
 test-coverage:
-	pytest -n auto --cov-branch --cov-report term-missing --cov=core tests/ -vv
+	uv run pytest -n auto --cov-branch --cov-report term-missing --cov=core tests/ -vv
 
 #Run Section
 run:
-	@uvicorn core.asgi:application --host 0.0.0.0 --port 8000 --workers 4 --loop uvloop --access-log --use-colors --no-server-header --no-date-header
+	@uv run uvicorn core.asgi:application --host 0.0.0.0 --port 8000 --workers 4 --loop uvloop --access-log --use-colors --no-server-header --no-date-header
 
 run-dev:
 	@uv run manage.py runserver 0.0.0.0:8000
@@ -53,7 +53,7 @@ lint:
 # Migration Section
 
 migrate:
-	@python manage.py migrate
+	@uv run manage.py migrate
 
 docker-migrate:
 	@docker compose run --remove-orphans app uv run manage.py migrate
@@ -62,4 +62,4 @@ docker-migration:
 	@docker compose run app --remove-orphans uv run manage.py makemigrations
 
 migration:
-	@python manage.py makemigrations
+	@uv run manage.py makemigrations
