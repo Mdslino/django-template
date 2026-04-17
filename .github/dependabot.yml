@@ -1,0 +1,73 @@
+version: 2
+updates:
+  - package-ecosystem: 'pip'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'chore(deps)'
+    labels:
+      - 'dependencies'
+      - 'python'
+    groups:
+      django:
+        patterns:
+          - 'django'
+      testing:
+        patterns:
+          - 'pytest*'
+      lint-and-typing:
+        patterns:
+          - 'ruff'
+          - 'mypy'
+      runtime-and-server:
+        patterns:
+          - 'gunicorn'
+          - 'uvicorn'
+          - 'uvloop'
+          - 'gevent'
+      data-and-db:
+        patterns:
+          - 'psycopg*'
+          - 'dj-database-url'
+      django-ecosystem:
+        patterns:
+          - 'django-debug-toolbar'
+          - 'django-extensions'
+          - 'django-filter'
+          - 'django-health-check'
+          - 'django-structlog'
+          - 'django-widget-tweaks'
+      other-python-dependencies:
+        patterns:
+          - '*'
+
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'chore(deps)'
+    labels:
+      - 'dependencies'
+      - 'docker'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'chore(ci)'
+    labels:
+      - 'dependencies'
+      - 'ci'
+    groups:
+      github-actions:
+        patterns:
+          - '*'
