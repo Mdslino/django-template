@@ -13,14 +13,14 @@ dependencies = [
     "django-structlog>=8.1.0",
     "django-widget-tweaks>=1.5.0",
     "django>=5.1.2",
-    "gevent>=24.10.3",
-    "gunicorn>=23.0.0",
+    "gevent>=26.4.0",
+    "gunicorn>=25.3.0",
     "markdown>=3.7",
     "psycopg[binary,pool]>=3.2.3",
     "python-decouple>=3.8",
     "requests>=2.32.3",
-    "uvicorn>=0.34.2",
-    "uvloop>=0.21.0",
+    "uvicorn>=0.44.0",
+    "uvloop>=0.22.1",
 ]
 
 [dependency-groups]
